@@ -21,10 +21,11 @@ int main()
 
 	if (bmp.isLoaded())
 	{
-
 		energyMap.resize(bmp.getHeight(), vector<unsigned char>(bmp.getWidth(), 0));
 
 		uchar4 *pixels = bmp.getPixels();
+
+		int max = 0;
 
 		for (int i = 0; i < bmp.getHeight(); i++)
 		{
@@ -108,9 +109,19 @@ int main()
 				}
 
 				if (count != 0)
+				{
 					energyMap[i][j] = sum / count;
+
+					if (energyMap[i][j] > max) max = energyMap[i][j];
+				}
 			}
 		}
+
+		float cf = 255.f / max;
+
+		for (int i = 0; i < bmp.getHeight(); i++)
+			for (int j = 0; j < bmp.getWidth(); j++)
+				energyMap[i][j] *= cf;
 
 		for (int i = 0; i < bmp.getHeight(); i++)
 			for (int j = 0; j < bmp.getWidth(); j++)
